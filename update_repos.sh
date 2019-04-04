@@ -1,11 +1,12 @@
 #!/bin/bash
 ###################################################
 # Name:    update_repos.sh
-# Purpose: for git repositories that you have cloned locally but are not
-#          making any edits upon.
+# Purpose: for git repositories that you have cloned locally but are not planning to modify
+# WARN: you will clobber work in progress if you've made any modifications
+#          
 
-SOURCE_DIR=~/src
- 
+SOURCE_DIR=$1 || $HOME/src/
+
 cd $SOURCE_DIR 
 
 for REPO in `ls -d */ | sed 's/\///' `
@@ -15,3 +16,5 @@ for REPO in `ls -d */ | sed 's/\///' `
 		git pull
 		cd ..
 done
+
+echo "Updates complete"
