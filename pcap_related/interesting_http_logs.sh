@@ -1,0 +1,2 @@
+#!/bin/bash
+tshark  -r $1-Y http.request|awk '{print $1,$2,$3,$5,$8,$9,$10}'|grep -ivE 'digicert|firefox|mozilla|chrome|apple.com|dnsomatic|mzstatic|avast|edgedl|spectrum|kindle|wifistub|mac-av|avcdn|httpconn|f-prot|fprot|dcprequest|meta.json|ubuntu|images|meethue|ocsp|roots|gstatic|favicon|spotify|microsoft|windowsupdate|kali|11\.141|jquery|generate_204|gen_204|\.1\.1|jpg|whatis|update-delta|subnet-calculator|wp-content|osxdaily|73\.147\.5|openwrt|\.pdf|squeezebox'
