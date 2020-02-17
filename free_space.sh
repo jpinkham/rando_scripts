@@ -1,5 +1,9 @@
 #!/bin/bash
+# blank line for readability
 echo
-echo "Partition     total  used free  %Used   Mount point"
-echo "------------------------------------------------------"
-df -h|grep -E 'nvm|sda' --color=never|grep -v boot
+
+# POSIX-format, human-readable sizes, local filesystems only -- exclude output for tmpfs and pseudo-filesystems
+#df --portability --human-readable --local|grep -vE 'loop|tmpfs|udev'
+
+# easier -- just limit to ext4
+df --portability --human-readable --local --type ext4
