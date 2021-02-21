@@ -9,6 +9,11 @@ import os
 from selenium import webdriver
 from datetime import datetime
 
+
+#TODO: Store the data in local SQLite
+
+
+
 # read config values
 config_file = "/Users/jpinkham/.config/lwconnect.conf"
 config = configparser.ConfigParser()
@@ -27,7 +32,7 @@ driver = webdriver.Firefox()
 driver.get("https://lwconnect.org")
 username_field = driver.find_element_by_id('username-email')
 password_field = driver.find_element_by_id('password')
-print("Logging in with username >",config['default']['username'], "<")
+##print("Logging in with username >",config['default']['username'], "<")
 
 #TODO: add try/except
 username_field.send_keys(config['default']['username'])
@@ -44,15 +49,18 @@ login_button.click()
 
 
 # pause for a few seconds before taking screenshot, to give dashboard time to load
-time.sleep(10)
+time.sleep(15)
 driver.save_screenshot(file_path)
-print("Screenshot saved to >%s<" % file_path)
+##print("Screenshot saved to >%s<" % file_path)
 
 # Grab raw usage number and "as-of" date
 usage_number = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/h3').text
 usage_date = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/div/span[2]').text
 
-print("Usage: %s, as of %s" % (usage_number,usage_date))
+my_usage = "%s|%s" % (usage_number,usage_date)
+with open("data.txt", "a") as data_file:
+    data_file.write("%s\n" % my_usage)
+##print("Stored usage data in data.txt")
 
 #Log out
 driver.get('https://lwconnect.org/Users/Account/LogOff')
