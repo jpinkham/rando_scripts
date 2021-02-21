@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#ls "/Library/Application Support/IDriveforMac/Logs"
+ls -tral "$HOME/Library/Application Support/IDriveforMac/SessionLogsNew/Backup"|tail
+echo "Found in $HOME/Library/Application Support/IDriveforMac/SessionLogsNew/Backup/"
