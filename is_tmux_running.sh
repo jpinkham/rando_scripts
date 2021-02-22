@@ -1,4 +1,5 @@
 #! /bin/bash
+#So I don't accidentally create a whole bunch of sessions, check if my main one is already running
 tmux has-session -t JPDefault
 if [ $? -eq 0 ]
 then
