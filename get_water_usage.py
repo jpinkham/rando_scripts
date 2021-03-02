@@ -3,16 +3,17 @@
 # parse resulting page to grab water usage data
 # credentials and page element names are stored in local config file
 
+print("Starting...")
 import configparser
 import time
 import os
 from selenium import webdriver
 from datetime import datetime
+import datetime
 
+print(f"{datetime.datetime.now()} Modules loaded.")
 
 #TODO: Store the data in local SQLite
-
-
 
 # read config values
 config_file = "/Users/jpinkham/.config/lwconnect.conf"
@@ -21,18 +22,27 @@ config = configparser.ConfigParser()
 config.read(config_file)
 
 # Get the current date in format YYYY-MM-DD
-datetime_format = datetime.now().strftime("%Y-%m-%d")
-file_path = "/Users/jpinkham/Desktop/water_usage.%s.png" % (datetime_format)
+datetime_format = datetime.datetime.now().strftime("%Y-%m-%d")
+file_path = "%s.%s.png" % (config['file_locations']['usage_screenshot'], datetime_format)
+#print(datetime.datetime.now())
+print(f"{datetime.datetime.now()} screenshot file path = {file_path}")
 
 # create webdriver object
 # Downloaded geckodriver from https://github.com/mozilla/geckodriver/releases
 #driver = webdriver.Firefox("/Users/jpinkham/geckodriver")
-driver = webdriver.Firefox()
+
+print(f"{datetime.datetime.now()} Spawning headless browser")
+firefox_options = webdriver.FirefoxOptions()
+firefox_options.headless = True
+driver = webdriver.Firefox(options=firefox_options)
+
 #TODO: add try/except
 driver.get("https://lwconnect.org")
+print(f"{datetime.datetime.now()} Loaded LWConnect login page")
 username_field = driver.find_element_by_id('username-email')
 password_field = driver.find_element_by_id('password')
-##print("Logging in with username >",config['default']['username'], "<")
+#print(datetime.datetime.now())
+print(f"{datetime.datetime.now()} Logging in with username {config['default']['username']}")
 
 #TODO: add try/except
 username_field.send_keys(config['default']['username'])
@@ -49,20 +59,27 @@ login_button.click()
 
 
 # pause for a few seconds before taking screenshot, to give dashboard time to load
+#print(datetime.datetime.now())
+print(f"{datetime.datetime.now()} Sleeping for 15 sec while we wait for dashboard to load...")
 time.sleep(15)
 driver.save_screenshot(file_path)
-##print("Screenshot saved to >%s<" % file_path)
+#print(datetime.datetime.now())
+print(f"{datetime.datetime.now()} Screenshot saved to {file_path}")
 
 # Grab raw usage number and "as-of" date
 usage_number = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/h3').text
 usage_date = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/div/span[2]').text
 
 my_usage = "%s|%s" % (usage_number,usage_date)
-with open("data.txt", "a") as data_file:
+#print(datetime.datetime.now())
+print(f"{datetime.datetime.now()} Storing data in {config['file_locations']['usage_data']}")
+with open(config['file_locations']['usage_data'], 'a') as data_file:
     data_file.write("%s\n" % my_usage)
-##print("Stored usage data in data.txt")
 
-#Log out
+#Log out 
+#print(datetime.datetime.now())
+print(f"{datetime.datetime.now()} Logging out.")
 driver.get('https://lwconnect.org/Users/Account/LogOff')
 
 driver.close()
+print(f"{datetime.datetime.now()} Success!")
