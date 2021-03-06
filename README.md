@@ -4,6 +4,8 @@ make my life easier.
 * epoch -- Bash script to convert input epoch to human-readable; print current
 	time in epoch if no input was supplied
 
+* get_water_usage.py -- Python script to scrape water usage data from water company
+
 * photon.sh -- Bash script that runs [Photon OSINT tool](https://github.com/s0md3v/Photon) on the
    specified site.  Calling the tool is a bit cumbersome as it runs from a
    Docker container and you need to mount a local dir inside the container
