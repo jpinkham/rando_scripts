@@ -11,10 +11,11 @@ echo ""
 echo "[History (from $start)]"
 echo ""
 
-log show --style syslog --info --start "$start" --predicate "$filter"
+log show --style syslog --info --start "$start" --predicate "$filter" | grep -viE 'powermanagement|thinning'
 
 echo ""
 echo "[Following]"
 echo ""
 
-log stream --style syslog --info --predicate "$filter"
+log stream --style syslog --info --predicate "$filter" | grep -viE 'powermanagement|thinning'
+
