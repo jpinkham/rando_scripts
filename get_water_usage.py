@@ -16,7 +16,7 @@ print(f"{datetime.datetime.now()} Modules loaded.")
 #TODO: Store the data in local SQLite
 
 # read config values
-config_file = "/Users/jpinkham/.config/lwconnect.conf"
+config_file = "$HOME/.config/lwconnect.conf"
 config = configparser.ConfigParser()
 #TODO: add try/except
 config.read(config_file)
