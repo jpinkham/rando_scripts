@@ -14,6 +14,8 @@ else
 	TMUXP_FILE="tmuxp_base.yaml"
 	test $OSTYPE = "darwin19" && TMUXP_FILE="tmuxp_osx.yaml"
 	test $OSTYPE = "linux-gnueabihf" && TMUXP_FILE="tmuxp_pi3.yaml"
+	test $HOSTNAME = "RaspberryPi3" && TMUXP_FILE="tmuxp_pi3.yaml"
+	test $HOSTNAME = "DietPiHole" && TMUXP_FILE="tmuxp_dietpihole.yaml"
 	if [[ $HOSTNAME == "*code*" ]]; then 
 		echo "\tDetected VPS server. Loading appropriate config"
 		$TMUXP_FILE="tmuxp_VPS.yaml"; 
