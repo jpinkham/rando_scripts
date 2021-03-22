@@ -10,16 +10,19 @@ else
 	echo "No session exists. Creating JPDefault..."
 	sleep 1
 
+	echo "Determined OSTYPE=$OSTYPE"
+	echo "Determined HOSTNAME=$HOSTNAME"
+
 	# determine which config file to load
 	TMUXP_FILE="tmuxp_base.yaml"
 	test $OSTYPE = "darwin19" && TMUXP_FILE="tmuxp_osx.yaml"
 	test $OSTYPE = "linux-gnueabihf" && TMUXP_FILE="tmuxp_pi3.yaml"
+	test $OSTYPE = "linux-gnu" && TMUXP_FILE="tmuxp_VPS.yaml"
 	test $HOSTNAME = "RaspberryPi3" && TMUXP_FILE="tmuxp_pi3.yaml"
 	test $HOSTNAME = "DietPiHole" && TMUXP_FILE="tmuxp_dietpihole.yaml"
-	test $HOSTNAME == "codegirl.org" && $TMUXP_FILE="tmuxp_VPS.yaml"; 
-	test $HOSTNAME == "tiny.codegirl.org" && $TMUXP_FILE="tmuxp_VPS.yaml"; 
 
 	echo "Loading $TMUXP_FILE..."
+
 	sleep 1
 	tmuxp load $HOME/dev/dotfiles/tmux/$TMUXP_FILE 
 	echo "Attaching."
