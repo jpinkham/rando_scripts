@@ -16,12 +16,11 @@ else
 	test $OSTYPE = "linux-gnueabihf" && TMUXP_FILE="tmuxp_pi3.yaml"
 	test $HOSTNAME = "RaspberryPi3" && TMUXP_FILE="tmuxp_pi3.yaml"
 	test $HOSTNAME = "DietPiHole" && TMUXP_FILE="tmuxp_dietpihole.yaml"
-	if [[ $HOSTNAME == "*code*" ]]; then 
-		echo "\tDetected VPS server. Loading appropriate config"
-		$TMUXP_FILE="tmuxp_VPS.yaml"; 
-	fi
+	test $HOSTNAME == "codegirl.org" && $TMUXP_FILE="tmuxp_VPS.yaml"; 
+	test $HOSTNAME == "tiny.codegirl.org" && $TMUXP_FILE="tmuxp_VPS.yaml"; 
 
-
+	echo "Loading $TMUXP_FILE..."
+	sleep 1
 	tmuxp load $HOME/dev/dotfiles/tmux/$TMUXP_FILE 
 	echo "Attaching."
 	tmux attach
