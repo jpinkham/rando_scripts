@@ -3,6 +3,7 @@
 # parse resulting page to grab water usage data
 # credentials and page element names are stored in local config file
 
+
 print("Starting...")
 import configparser
 import time
