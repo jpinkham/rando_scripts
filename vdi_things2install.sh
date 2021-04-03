@@ -40,6 +40,9 @@ if [ -f .tmux.conf ];
 then echo "Moving existing tmux.conf file"; cp .tmux.conf .tmux.conf.old; rm -f .tmux.conf
 fi
 
+mkdir -p ~/.atom
+
+echo "Symlinking config files"
 
 ln -f -s ~/dev/dotfiles/bashrc         .bashrc
 ln -f -s ~/dev/dotfiles/bash_profile   .bash_profile
@@ -49,6 +52,16 @@ ln -f -s ~/dev/dotfiles/vimrc          .vimrc
 ln -f -s ~/dev/dotfiles/toprc          .toprc
 ln -f -s ~/dev/dotfiles/tmux.conf      .tmux.conf
 ln -f -s ~/dev/dotfiles/gitconfig      .gitconfig
+
+echo "Symlinking Atom editor config files"
+for ATOMFILE in config.cson github.cson init.coffee keymap.cson snippets.cson styles.less;
+do
+	ln -s ~/dev/dotfiles/atom/$ATOMFILE ~/.atom/$ATOMFILE
+done;
+
+echo "Symlinks complete"
+
+
 
 # DO NOT SYMLINK OR COPY or you'll lose the authorized_keys entry from when you created the VM, and then you;ll be locked out
 ##cat ~/dev/dotfiles/ssh_authorized_keys >> ~/.ssh/authorized_keys
