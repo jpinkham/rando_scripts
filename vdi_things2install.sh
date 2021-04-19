@@ -1,12 +1,11 @@
 #!/bin/bash
 
-cd $HOME
-mkdir -p bin
-cd bin
+mkdir -p $HOME/bin
+cd $HOME/bin || { echo "Could not change to directory >$HOME/bin<"; exit 1; }
 ln -f -s ~/dev/dotfiles/vdi_things2install.sh .
 ln -f -s ~/dev/dotfiles/update_repos.sh .
 ln -f -s ~/dev/dotfiles/is_tmux_running.sh .
-cd $HOME
+cd $HOME || { echo "Could not change to directory >$HOME<"; exit 1; }
 echo "------------------------------------"
 echo "Configuring favorite dotfiles..."
 echo "------------------------------------"
@@ -40,8 +39,6 @@ if [ -f .tmux.conf ];
 then echo "Moving existing tmux.conf file"; cp .tmux.conf .tmux.conf.old; rm -f .tmux.conf
 fi
 
-mkdir -p ~/.atom
-
 echo "Symlinking config files"
 
 ln -f -s ~/dev/dotfiles/bashrc         .bashrc
@@ -53,11 +50,17 @@ ln -f -s ~/dev/dotfiles/toprc          .toprc
 ln -f -s ~/dev/dotfiles/tmux.conf      .tmux.conf
 ln -f -s ~/dev/dotfiles/gitconfig      .gitconfig
 
+mkdir -p ~/.atom
 echo "Symlinking Atom editor config files"
 for ATOMFILE in config.cson github.cson init.coffee keymap.cson snippets.cson styles.less;
 do
 	ln -s ~/dev/dotfiles/atom/$ATOMFILE ~/.atom/$ATOMFILE
 done;
+
+echo "Symlinking python config files"
+mkdir -p ~/.pip && ln -f -s ~/dev/dotfiles/python/pip.conf ~/.pip/.
+
+
 
 echo "Symlinks complete"
 
@@ -103,6 +106,7 @@ echo "-------------------------------------"
 echo "Sourcing bash files..."
 echo "------------------------------------"
 #load new bash rc and aliases
+# shellcheck source=/dev/null
 source $HOME/.bashrc
 
 echo "-------------------------------------"

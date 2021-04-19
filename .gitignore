@@ -1,0 +1,112 @@
+# # From https://github.com/github/gitignore/blob/master/Perl.gitignore
+blib/
+_build/
+inc/
+Build
+Build.bat
+Makefile
+MYMETA.yml
+nytprof.out
+pm_to_blib
+MYMETA.json
+
+# Devel::Cover database
+*cover_db
+# http://coveralls.io   config file, contains private key
+.coveralls.yml
+
+
+
+#### source: https://help.github.com/articles/ignoring-files
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+
+
+##### Source: https://github.com/mikepqr/dotfiles/blob/main/git/.config/git/ignore
+# Reference: https://mike.place/2020/global-gitignore/
+
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+build/
+
+
+# Vim
+######################
+.*.swp
+tags
+Session.vim
+
+# Python
+######################
+.ipynb_checkpoints
+__pycache__
+*.egg-info
+*.pkl
+*.npy
+.cache
+.hypothesis
+Scratch.ipynb
+Untitled*.ipynb
+.mypy_cache
+
+# Environments
+######################
+.env
+.envrc
+.direnv
+venv
+env-local
+zappa_settings.json
+
+# JavaScript
+######################
+node_modules/
+dist/
+.eslintcache
+
