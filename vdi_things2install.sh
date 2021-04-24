@@ -5,6 +5,7 @@ cd $HOME/bin || { echo "Could not change to directory >$HOME/bin<"; exit 1; }
 ln -f -s ~/dev/rando_scripts/vdi_things2install.sh .
 ln -f -s ~/dev/rando_scripts/update_repos.sh .
 ln -f -s ~/dev/rando_scripts/is_tmux_running.sh .
+ln -f -s ~/dev/rando_scripts/tail_syslog.sh .
 cd $HOME || { echo "Could not change to directory >$HOME<"; exit 1; }
 echo "------------------------------------"
 echo "Configuring favorite dotfiles..."
