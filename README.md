@@ -5,4 +5,4 @@ This is too much work to keep updated 🦖
 Maybe I'll use something that can auto-gen the readme based on what's in the repo.
 
 
-[![DepShield Badge](https://depshield.sonatype.org/badges/jpinkham/rando-scripts/depshield.svg)](https://depshield.github.io)
+[![DepShield Badge](https://depshield.sonatype.org/badges/jpinkham/rando_scripts/depshield.svg)](https://depshield.github.io)
