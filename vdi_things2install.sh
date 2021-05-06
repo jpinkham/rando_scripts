@@ -2,9 +2,10 @@
 
 mkdir -p $HOME/bin
 cd $HOME/bin || { echo "Could not change to directory >$HOME/bin<"; exit 1; }
-ln -f -s ~/dev/dotfiles/vdi_things2install.sh .
-ln -f -s ~/dev/dotfiles/update_repos.sh .
-ln -f -s ~/dev/dotfiles/is_tmux_running.sh .
+ln -f -s ~/dev/rando_scripts/vdi_things2install.sh .
+ln -f -s ~/dev/rando_scripts/update_repos.sh .
+ln -f -s ~/dev/rando_scripts/is_tmux_running.sh .
+ln -f -s ~/dev/rando_scripts/tail_syslog.sh .
 cd $HOME || { echo "Could not change to directory >$HOME<"; exit 1; }
 echo "------------------------------------"
 echo "Configuring favorite dotfiles..."
@@ -41,34 +42,30 @@ fi
 
 echo "Symlinking config files"
 
-ln -f -s ~/dev/dotfiles/bashrc         .bashrc
+ln -f -s ~/dev/dotfiles/bashrc-common  .bashrc
 ln -f -s ~/dev/dotfiles/bash_profile   .bash_profile
 ln -f -s ~/dev/dotfiles/bash_aliases   .bash_aliases
 ln -f -s ~/dev/dotfiles/bash_logout    .bash_logout
 ln -f -s ~/dev/dotfiles/vimrc          .vimrc
 ln -f -s ~/dev/dotfiles/toprc          .toprc
-ln -f -s ~/dev/dotfiles/tmux.conf      .tmux.conf
+ln -f -s ~/dev/dotfiles/tmux/tmux.conf .tmux.conf
 ln -f -s ~/dev/dotfiles/gitconfig      .gitconfig
 
 mkdir -p ~/.atom
 echo "Symlinking Atom editor config files"
 for ATOMFILE in config.cson github.cson init.coffee keymap.cson snippets.cson styles.less;
 do
-	ln -s ~/dev/dotfiles/atom/$ATOMFILE ~/.atom/$ATOMFILE
+	ln -f -s ~/dev/dotfiles/atom/$ATOMFILE ~/.atom/$ATOMFILE
 done;
 
-echo "Symlinking python config files"
-mkdir -p ~/.pip && ln -f -s ~/dev/dotfiles/python/pip.conf ~/.pip/.
-
-
+#echo "Symlinking python config files"
+#mkdir -p ~/.pip && ln -f -s ~/dev/dotfiles/python/pip.conf ~/.pip/.
 
 echo "Symlinks complete"
 
-
-
 # DO NOT SYMLINK OR COPY or you'll lose the authorized_keys entry from when you created the VM, and then you;ll be locked out
 ##cat ~/dev/dotfiles/ssh_authorized_keys >> ~/.ssh/authorized_keys
-cat ~/dev/dotfiles/ssh_config >> ~/.ssh/config
+[ -d ~/.ssh ] && cat ~/dev/dotfiles/ssh_config >> ~/.ssh/config
 
 cp ~/dev/dotfiles/git-completion.bash $HOME/.
 cp ~/dev/dotfiles/git-prompt.sh $HOME/.
@@ -78,15 +75,16 @@ echo "Installing favorite apps..."
 echo "------------------------------------"
 #####sudo yum --assumeyes --skip-broken install unzip whois nmap docker python3.x86_64 mtr lynx telnet java-11-openjdk.x86_64 tree perl-Net-SSLeay nmap-ncat yum-cron nomachine.x86_64 tmux screen xfdesktop strace
 ## TODO: using $MACHINE_TYPE, create a mix of yum/apt/brew commands
+sudo apt install unzip whois docker.io python3 python3-pip mtr-tiny lynx telnet tree nmap nomachine tmux strace mlocate
 
 
 echo "------------------------------------"
 echo "Loading docker images..."
 echo "-------------------------------------"
-sudo docker pull docker.vrsn.com/drwetter/testssl.sh
-
-#https://github.com/sullo/nikto
-sudo docker pull docker.vrsn.com/frapsoft/nikto
+sudo docker pull drwetter/testssl.sh
+sudo docker pull frapsoft/nikto
+sudo docker pull knowl3dge/binwalk
+#sudo docker pull 
 
 # Start up docker
 echo "------------------------------------"
