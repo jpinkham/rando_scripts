@@ -6,11 +6,10 @@
 print("Starting...")
 import configparser
 import time
-# TODO use this to help determine paths for output. i think. #from pathlib import Path
+from pathlib import Path
 import os
-import sys
-print("python path when running this script: %s" % sys.path)
 from selenium import webdriver
+from datetime import datetime
 import datetime
 import pprint
 
@@ -33,14 +32,12 @@ config = configparser.ConfigParser()
 print(f"{datetime.datetime.now()} Reading config file >{config_file}<")
 #TODO: add try/except
 config.read(config_file)
-#print(f"{datetime.datetime.now()} Config file read. List of sections:")
-#pp.pprint(config.sections())
+print(f"{datetime.datetime.now()} Config file read. List of sections:")
+pp.pprint(config.sections())
 
 # Get the current date in format YYYY-MM-DD
 datetime_format = datetime.datetime.now().strftime("%Y-%m-%d")
-screenshot_file_path = "%s/%s.%s.png" %\
-        (os.environ['HOME'], config['file_locations']['usage_screenshot'], datetime_format)
-
+screenshot_file_path = "%s/%s.%s.png" % (os.environ['HOME'], config['file_locations']['usage_screenshot'], datetime_format)
 print(f"{datetime.datetime.now()} screenshot file path = {screenshot_file_path}")
 
 # create webdriver object
@@ -96,42 +93,17 @@ usage_data_file = "%s/%s" % (os.environ['HOME'], config['file_locations']['usage
 os.system("touch %s" % usage_data_file)
 
 
-#Log out
+#Log out 
 print(f"{datetime.datetime.now()} Logging out.")
 driver.get('https://lwconnect.org/Users/Account/LogOff')
 
 driver.close()
 print(f"{datetime.datetime.now()} Closing browser.")
 
-# don't want a bunch of zombie firefox instances hanging around if anything goes
-# wrong with saving the data, so wait to perform these actions until selenium work is complete
-
-
 print(f"{datetime.datetime.now()} Storing data in {usage_data_file}")
-my_usage = "%s|%s" % (usage_number, usage_date)
+my_usage = "%s|%s" % (usage_number,usage_date)
 with open(usage_data_file, 'a') as data_file:
     data_file.write("%s\n" % my_usage)
 
-
-# Determine the difference since last time
-prev_water_usage_file = "%s/%s" % (os.environ['HOME'], config['file_locations']['prev_usage_data'])
-with open(prev_water_usage_file) as x:
-    prev_water_usage_data = x.read()
-
-
-# i'm sure there's a better way, but this is just an experiment
-usage_number_int = usage_number.split()[0]  # this contains the word "Gallons", so we need to lop that off
-
-print(f"{datetime.datetime.now()} LAST VALUE {prev_water_usage_data}")
-print(f"{datetime.datetime.now()} CURRENT VALUE {usage_number}")
-
-usage_diff = int(usage_number_int) - int(prev_water_usage_data)
-
-print(f"{datetime.datetime.now()} Gallons used since last reading {usage_diff}")
-
-# save usage_number_int to prev_usage_data file, to use for next time
-
-# TODO Upload to adafruit IO
-# First check if usage_diff is a non-zero number
 
 print(f"{datetime.datetime.now()} Success!")
