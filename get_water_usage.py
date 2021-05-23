@@ -79,11 +79,8 @@ time.sleep(15)
 driver.save_screenshot(screenshot_file_path)
 print(f"{datetime.datetime.now()} Screenshot successfully  saved to {screenshot_file_path}")
 
-# Grab raw usage number and "as-of" date
-usage_number = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/h3').text
-usage_date = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/div/span[2]').text
-
 usage_data_file = "%s/%s" % (os.environ['HOME'], config['file_locations']['usage_data'])
+
 #TODO check file existence
 #if !os.path.isfile(usage_data_file):
 #    print(f"Error! Usage data file {usage_data_file} cannot be found. Assuming first run.")
@@ -91,19 +88,23 @@ usage_data_file = "%s/%s" % (os.environ['HOME'], config['file_locations']['usage
 # this will auto-create an empty file if the file does not already exist, so that the script
 #  won't break if the data file isn't there
 os.system("touch %s" % usage_data_file)
+try:
+    # Grab raw usage number and "as-of" date
+    usage_number = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/h3').text
+    usage_date = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/div/span[2]').text
 
+    #Log out 
+    print(f"{datetime.datetime.now()} Logging out.")
+    driver.get('https://lwconnect.org/Users/Account/LogOff')
+    driver.close
+    print(f"{datetime.datetime.now()} Storing data in {usage_data_file}")
+    my_usage = "%s|%s" % (usage_number,usage_date)
+    with open(usage_data_file, 'a') as data_file:
+        data_file.write("%s\n" % my_usage)
+    print(f"{datetime.datetime.now()} Success!")
+except:
+    print(f"{datetime.datetime.now()} ERROR! Something went wrong. Closing the browser.")
+    
+    driver.close()
+    print(f"{datetime.datetime.now()} Script FAILED") 
 
-#Log out 
-print(f"{datetime.datetime.now()} Logging out.")
-driver.get('https://lwconnect.org/Users/Account/LogOff')
-
-driver.close()
-print(f"{datetime.datetime.now()} Closing browser.")
-
-print(f"{datetime.datetime.now()} Storing data in {usage_data_file}")
-my_usage = "%s|%s" % (usage_number,usage_date)
-with open(usage_data_file, 'a') as data_file:
-    data_file.write("%s\n" % my_usage)
-
-
-print(f"{datetime.datetime.now()} Success!")
