@@ -9,6 +9,9 @@ import time
 from pathlib import Path
 import os
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from datetime import datetime
 import datetime
 import pprint
@@ -40,39 +43,42 @@ datetime_format = datetime.datetime.now().strftime("%Y-%m-%d")
 screenshot_file_path = "%s/%s.%s.png" % (os.environ['HOME'], config['file_locations']['usage_screenshot'], datetime_format)
 print(f"{datetime.datetime.now()} screenshot file path = {screenshot_file_path}")
 
-# create webdriver object
-# Downloaded geckodriver from https://github.com/mozilla/geckodriver/releases
-#driver = webdriver.Firefox("/Users/jpinkham/geckodriver")
 
 print(f"{datetime.datetime.now()} Spawning headless browser")
 firefox_options = webdriver.FirefoxOptions()
 firefox_options.headless = True
-driver = webdriver.Firefox(options=firefox_options)
+webdriver_logpath='/tmp/selenium.get_water_usage.log'
+driver = webdriver.Firefox(options=firefox_options, 
+                            service_log_path=webdriver_logpath)
+print(f"{datetime.datetime.now()} Webdriver object creation successful")
 
 #TODO: add try/except
-driver.get("https://lwconnect.org")
-print(f"{datetime.datetime.now()} Loaded LWConnect login page")
-username_field = driver.find_element_by_id('username-email')
-password_field = driver.find_element_by_id('password')
-#print(datetime.datetime.now())
-print(f"{datetime.datetime.now()} Logging in with username {config['default']['username']}")
+try:
+    driver.get("https://lwconnect.org")
+    print(f"{datetime.datetime.now()} Loading LWConnect login page")
+    print(f"    Looking for username field >{config['find_elements']['username_field']}")
+    #source for the next line: https://selenium-python.readthedocs.io/waits.html
+#    username_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID,config['find_elements']['username_field']))
+    username_field = driver.find_element(By.XPATH,config['find_elements']['username_field'])
+#    print("     Found username field!")
+    print(f"    Looking for password field >{config['find_elements']['password_field']}")
+    password_field = driver.find_element(By.XPATH,config['find_elements']['password_field'])
+    print('     Found password field!')
+    #print(datetime.datetime.now())
+    print(f"{datetime.datetime.now()} Logging in with username {config['default']['username']}")
 
-#TODO: add try/except
-username_field.send_keys(config['default']['username'])
-password_field.send_keys(config['default']['password'])
+    username_field.send_keys(config['default']['username'])
+    password_field.send_keys(config['default']['password'])
 
-#TODO: add try/except
-print(f"{datetime.datetime.now()} Locating login button")
-login_button = driver.find_element_by_xpath(config['find_elements']['login_button'])
-login_button.click()
-print(f"{datetime.datetime.now()} Clicked!")
-
-#TODO: add try/except.  Code will quit here if it can't find this element, leaving browser open
-#TODO: parse page to grab gallons of water used
-##view_chart_link = driver.find_element_by_link_text('View Usage')
-##view_chart_link.click()
-
-
+    print(f"{datetime.datetime.now()} Locating login button: {config['find_elements']['login_button']})")
+    login_button = driver.find_element(By.CSS,config['find_elements']['login_button'])
+    login_button.click()
+    print(f"{datetime.datetime.now()} Clicked!")
+except:
+    print(f"{datetime.datetime.now()} ERROR! Couldn't find all the login page elements. Closing the browser.")
+    driver.quit()
+    print(f"{datetime.datetime.now()} Script FAILED. Exiting")
+    quit()
 # pause for a few seconds before taking screenshot, to give dashboard time to load
 print(f"{datetime.datetime.now()} Sleeping for 15 sec while we wait for dashboard to load...")
 time.sleep(15)
@@ -90,21 +96,21 @@ usage_data_file = "%s/%s" % (os.environ['HOME'], config['file_locations']['usage
 os.system("touch %s" % usage_data_file)
 try:
     # Grab raw usage number and "as-of" date
-    usage_number = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/h3').text
-    usage_date = driver.find_element_by_xpath('//*[@id="layout-wrapper"]/div[2]/div[1]/section[2]/div/div/div[2]/div[3]/div/div[1]/div/span[2]').text
+    usage_number = driver.find_element(By.XPATH,config['find_elements']['usage_amount_field']).text
+    usage_date = driver.find_element(By.XPATH,config['find_elements']['usage_date_field']).text
 
     #Log out 
     print(f"{datetime.datetime.now()} Logging out.")
     driver.get('https://lwconnect.org/Users/Account/LogOff')
-    driver.close
+    driver.quit()
     print(f"{datetime.datetime.now()} Storing data in {usage_data_file}")
     my_usage = "%s|%s" % (usage_number,usage_date)
     with open(usage_data_file, 'a') as data_file:
         data_file.write("%s\n" % my_usage)
     print(f"{datetime.datetime.now()} Success!")
 except:
-    print(f"{datetime.datetime.now()} ERROR! Something went wrong. Closing the browser.")
+    print(f"{datetime.datetime.now()} ERROR! Something went wrong while searching page for usage data. Closing the browser.")
     
-    driver.close()
+    driver.quit()
     print(f"{datetime.datetime.now()} Script FAILED") 
 
