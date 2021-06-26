@@ -57,7 +57,7 @@ try:
     firefox_options = webdriver.FirefoxOptions()
     firefox_options.headless = True
     #config['firefox_options']['headless']
-    firefox_options.profile = "%s/%s" % (os.environ['HOME'], config['firefox_options']['profile'])
+    ###firefox_options.profile = "%s/%s" % (os.environ['HOME'], config['firefox_options']['profile'])
     firefox_options.add_argument("--start-maximized")
 
     webdriver_logpath = '/tmp/selenium.get_water_usage.log'
