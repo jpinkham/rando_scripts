@@ -13,6 +13,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 
 from datetime import datetime
@@ -87,7 +88,7 @@ try:
     print("     Found username field!")
     print(f"{datetime.datetime.now()} Logging in with username {config['default']['username']}")
     time.sleep(5)
-##    username_field.send_keys(config['default']['username'])
+    username_field.send_keys(config['default']['username'])
     print('     Filled in username field')
 
     print(f"    Looking for password field >{config['find_elements']['password_field']}<. Pausing 5 sec first")
@@ -97,12 +98,21 @@ try:
     print('     Found password field!')
     #pp.pprint(password_field)
     password_field.send_keys(config['default']['password'])
-    print('     Filled in password field')
+    print('     Filled in password field. Moving to login button element')
+    password_field.send_keys(Keys.TAB)
+    password_field.send_keys(Keys.TAB)
+    password_field.send_keys(Keys.TAB)
+    password_field.send_keys(Keys.TAB)
+    password_field.send_keys(Keys.TAB)
     print(f"{datetime.datetime.now()} Locating login button: {config['find_elements']['login_button']})")
+    #WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, config['find_elements']['login_button'])))
     #login_button = driver.find_element(By.XPATH, config['find_elements']['login_button'])
-    login_button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, config['find_elements']['login_button'])))
-    time.sleep(5)
-    login_button.click()
+    #time.sleep(5)
+    #login_button.click()
+    #move to field using 5 tabs, from password field, then hit enter
+    password_field.send_keys(Keys.ENTER)
+
+
     print(f"{datetime.datetime.now()} Clicked!")
 except TimeoutException as timeout:
     #except TimeoutException(message, screen, stacktrace)
@@ -133,10 +143,13 @@ usage_data_file = "%s/%s" % (os.environ['HOME'], config['file_locations']['usage
 #  won't break if the data file isn't there
 os.system("touch %s" % usage_data_file)
 try:
-    # Grab raw usage number and "as-of" date
     WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, config['find_elements']['usage_amount_field'])))
+    # Grab raw usage number and "as-of" date, after waiting up to 60sec for element to be located
     usage_number = driver.find_element(By.XPATH, config['find_elements']['usage_amount_field']).text
     usage_date = driver.find_element(By.XPATH, config['find_elements']['usage_date_field']).text
+
+    print(f"{datetime.datetime.now()} USAGE DATA: >{usage_number}<   as of >{usage_date}<")
+
 
     #Log out
     print(f"{datetime.datetime.now()} Logging out.")
