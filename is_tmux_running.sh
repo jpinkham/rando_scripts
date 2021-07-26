@@ -24,6 +24,9 @@ else
 	echo "Loading $TMUXP_FILE..."
 
 	sleep 1
+# this script must be "sourced" or env vars created will not be available inside tmux session
+    source $HOME/dev/rando_scripts/is_agent_running.sh
+    sleep 1
 	tmuxp load $HOME/dev/dotfiles/tmux/$TMUXP_FILE 
 	echo "Attaching."
 	tmux attach
