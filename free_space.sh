@@ -9,4 +9,4 @@ echo
  test "$MACHTYPE" = "x86_64-pc-linux-gnu" && df --portability --human-readable --local --type ext4
 
 # compatible with BSD/MacOS
- test "$MACHTYPE" = "x86_64-apple-darwin19" && df -H -T ext4,hfs,apfs
+ test "$MACHTYPE" = "x86_64-apple-darwin19" && df -P -H -T ext4,hfs,apfs
