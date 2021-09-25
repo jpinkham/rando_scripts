@@ -8,7 +8,7 @@ if [[ $AGENT_OUTPUT == "Error connecting to agent: No such file or directory" ]]
     ssh-add -t 9999999 ~/.ssh/github_rsa > /dev/null 2>&1
     ssh-add -t 9999999 ~/.ssh/id_github  > /dev/null 2>&1
     ssh-add -t 9999999 ~/.ssh/id_rsa  > /dev/null 2>&1
-elif [ "$AGENT_OUTPUT" = "The agent has no identities." ]; then
+elif [ "$AGENT_OUTPUT" == "The agent has no identities." ]; then
     echo "SSH agent running but contains no keys. Adding."
     ssh-add -t 9999999 ~/.ssh/github_rsa > /dev/null 2>&1
     ssh-add -t 9999999 ~/.ssh/id_github  > /dev/null 2>&1
@@ -32,3 +32,5 @@ echo "SSH_AGENT_PID = $SSH_AGENT_PID"
 echo "SSH_AUTH_SOCK = $SSH_AUTH_SOCK"
 echo "---------------------------------------------------"
 
+#echo "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+#sleep 2
