@@ -4,7 +4,8 @@ tmux has-session -t JPDefault
 if [ $? -eq 0 ]
 then
 	echo "Session already running. Now attaching..." 
-	sleep 1
+    # echo the command to all bash shells to point to same ssh agent, which was already started and had keys loaded. the socket will change regularly, so it will need to be updated in any running bash session
+    for i in 1 2 3 4; do tmux send-keys -t$i "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"; done
 	tmux attach 
 else 
 	echo "No session exists. Creating JPDefault..."
@@ -30,7 +31,8 @@ else
 
 	# wait 2 seconds so I can see what config file is loading
 	sleep 2
-	tmuxp load $HOME/dev/dotfiles/tmux/$TMUXP_FILE 
-	echo "Attaching."
+    # codegirl claims this can't be found when run as initial command from Shelly ios app, so added symlink
+	$HOME/bin/tmuxp load $HOME/dev/dotfiles/tmux/$TMUXP_FILE 
+    echo "Attaching."
 	tmux attach
 fi
