@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# Purpose: query Pihole server for a host on local network, parse output from nslookup, returning only the hostname
-
-NS=192.168.2.5
-ADDR=$1
-
-#echo "Looking up >$ADDR< using NS >$NS<"
-nslookup $ADDR $NS | cut -d "=" -f 2 | sed -e 's/^[[:space:]]//g' | sed -e 's/\.home\.//'
