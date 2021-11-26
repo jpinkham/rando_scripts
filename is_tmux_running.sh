@@ -5,7 +5,7 @@ if [ $? -eq 0 ]
 then
 	echo "Session already running. Now attaching..." 
     # echo the command to all bash shells to point to same ssh agent, which was already started and had keys loaded. the socket will change regularly, so it will need to be updated in any running bash session
-    for i in 1 2 3 4; do tmux send-keys -t$i "history -a ; export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"; done
+    for i in 0 1 2 3 4; do tmux send-keys -t$i "history -a ; export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"; done
 	tmux attach 
 else 
 	echo "No session exists. Creating JPDefault..."
