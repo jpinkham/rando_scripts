@@ -4,8 +4,20 @@ tmux has-session -t JPDefault
 if [ $? -eq 0 ]
 then
 	echo "Session already running. Now attaching..." 
-    # echo the command to all bash shells to point to same ssh agent, which was already started and had keys loaded. the socket will change regularly, so it will need to be updated in any running bash session
-    for i in 0 1 2 3 4; do tmux send-keys -t$i "history -a ; export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"; done
+    # echo the commands to all bash shells to point to same ssh agent, which was already started and had keys loaded. the socket will change regularly, so it will need to be updated in any running bash session
+
+    for i in 1 2 3 ;do
+        # send Ctrl-u to clear whatever was left on the command line
+        tmux send-keys -t$i C-u
+
+        # run history command to append current bash history to .bash_history
+        tmux send-keys -t$i "history -a" Enter
+
+        # I'll be able to use the SSH agent keys that are available outside tmux
+        # so I can use git operations in any bash shell without being prompted for password
+        tmux send-keys -t$i "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK" Enter
+    done
+
 	tmux attach 
 else 
 	echo "No session exists. Creating JPDefault..."
