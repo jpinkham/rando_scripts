@@ -2,9 +2,17 @@
 
 import sys
 
+def usage():
+    print(f"\nUsage: {sys.argv[0]} [<prompt text>] [<URL with search param last>]\n")
+
+# first argument is the script name itself, hence checking for arguments
+if len(sys.argv) < 3:
+    usage()
+    exit()
+
 PROMPT_TEXT = sys.argv[1]
 URL = sys.argv[2]
 
-print("Building JS for prompt >$PROMPT_TEXT< and dest URL >$URL<")
+print(f"Building JS for prompt >{PROMPT_TEXT}< and dest URL >{URL}<\n")
 
-print("javascript:var search_term=prompt('$PROMPT_TEXT ?'); window.location.href='$URL%22' + search_term + '%22';")
+print(f"javascript:var search_term=prompt('{PROMPT_TEXT} ?'); window.location.href='{URL}' + search_term ;")
